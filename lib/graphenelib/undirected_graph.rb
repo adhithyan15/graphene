@@ -1,45 +1,9 @@
 module Graphenelib
   ##
-  # The graph class is the base class for the different types of graphs
-  # to be supported by Graphene.
-  #
-  # For people unfamiliar with Graph data structures, a Graph is made
-  # up of a set of nodes (containing some information) and a set of
-  # connections between those nodes.
-  #
-  # @author Adhithya Rajasekaran <adhithyan15 at gmail dotcom>
-  class Graph
-    ##
-    # Inorder to initialize a brand new Graph object, you don't need
-    # to pass anything in. The Graph class uses the adjacency list
-    # representation of Graphs. The current (naive) implementation
-    # uses a Hash Table to implement this adjacency list. This will
-    # be improved in the future. The adjacency list doesn't actually
-    # store the node objects. It just stores the keys. The
-    # actual objects are stored in another Hashtable.
-    def initialize
-      # adjacency_list (Hash object) will store the keys of the nodes added
-      # to graph in an array with the key of the node that
-      # they are adjacent to.
-      @adjacency_list = {}
-
-      # top_level nodes are the nodes that start the graph and other nodes
-      # will be connected to these nodes. This key value pair is
-      # necessary as the different graph algorithms require starting points
-      # to walk the graphs.
-      @adjacency_list['top_level'] = []
-
-      # storage (hash object) stores the actual nodes and maps them to their
-      # keys.
-      @storage = {}
-
-      # field or method name custom key reverse lookup storage
-      @field_or_method_lookup = {}
-
-      # length stores the number of nodes present in the
-      @length = 0
-    end
-
+  # The UnDirectedGraph allows you to store Nodes and Edges in an undirected
+  # fashion. It inherits directly from the Graph class and overrides a few
+  # methods from the Graph class and adds a few of its own.
+  class UnDirectedGraph < Graph
     ##
     # add_node method allows you to add a new node into the Graph.
     #
@@ -52,7 +16,7 @@ module Graphenelib
     # field. You can specify a custom key for each object that you
     # want to be added as a Node.
     #
-    # The custom key will be used while searching and sorting elements '
+    # The custom key will be used while searching and sorting elements
     # in the Graph.The key can be a plain String value or it could indicate
     # the field or method name of the Object that you have passed in.
     # If you are intending to pass in a method or a field name of an
@@ -69,6 +33,19 @@ module Graphenelib
     #       read their entire documentation there. Thanks
     # @raise [NewNodeObjectCannotBeNilError] Nil object as input.
     # @raise [ObjectHasNoHashMethodError] No .hash method present in the input
+    # @raise [NodeObjectNotUniqueError] Node object being added is already
+    #        present in the Graph.
+    # @raise [FieldOrMethodNonExistentError] The key parameter being passed in
+    #        looks like a method call. The method being called on that node
+    #        object doesn't exist.
+    # @raise [SecruityViolationError] The key parameter being passed in looks
+    #        like a method call. But calling that method would result in
+    #        a severe security breach. So gracefully degrading with this error.
+    # @raise [KeyValueNotStringError] The key value specified either as a plain
+    #        value or as a method name call is not a String. If you specified
+    #        a plain value, then the value is not a String. But if you
+    #        specified a method call, then the method returned a non String
+    #        value when called.
 
     def add_node(input, key = '')
       # First check will be to see if the input is nil. Nil inputs are not
@@ -126,7 +103,7 @@ module Graphenelib
             # The only part we are really interested in is the letters
             # after the "." So redefining key without the first "."
             key = key[1..-1]
-            
+
             unless input.respond_to?(key)
               error_message = "The value of key parameter (#{key}) passed into "
               error_message += 'the add_node method seemed to refer to a field '
@@ -228,16 +205,25 @@ module Graphenelib
     end
 
     ##
-    # directed? method is a placeholder method to be overridden by the
-    # specific Graph Classes that are going to inherit this class. It
-    # is supposed to tell you whether the graph object is directed
-    # or not. Since a Graph is not directed by default, this method
-    # will return false.
+    # directed? method confirms whether a graph is directed or not. Since this
+    # is the undirected graph implementation, it always returns false.
     #
-    # @return [Boolean] Returns a boolean indicating a directed graph or not
+    # @return [Boolean] Returns a boolean indicating a directed graph or not. Always
+    #         returns false.
 
     def directed?
-      return false
+      false
+    end
+
+    ##
+    # undirected? method confirms whether a graph is undirected or not. Since this
+    # is the undirected graph implementation, it always returns true.
+    #
+    # @return [Boolean] Returns a boolean indicating a undirected graph or not.
+    #         Always returns true.
+
+    def undirected?
+      true
     end
 
     ##
@@ -251,33 +237,14 @@ module Graphenelib
     # @return [nil] You should see `output.{format}` in your folder.
 
     def visual_output(format = 'pdf')
-
+      error_message = 'Graph class is supposed to be an interface class. '
+      error_message += ' But Ruby doesn\'t provide interface classes. So'
+      error_message += ' Graph is designed as a regular class. But don\'t'
+      error_message += ' use it on its own. Use its inheritants like'
+      error_message += ' UnDirectedGraph or DirectedGraph as they implement'
+      error_message += ' a lot of features. Thanks!'
+      fail DontUseGraphClassError, error_message
     end
 
-    ##
-    # forbidden_commands method is static method that returns a list of
-    # forbidden commands that might be passed into the user inputted field
-    # and method name for the add_node method. This is a static method as
-    # duplicating this data across all the instances doesn't make sense.
-    # @return [Hash] Hash of forbidden commands
-    def self.forbidden_commands
-      forbidden_commands_hash = {}
-      forbidden_commands += %w(abort at_exit autoload autoload?)
-      forbidden_commands += %w(binding block_given? callcc)
-      forbidden_commands += %w(caller_locations catch chomp)
-      forbidden_commands += %w(chop eval exec exit exit!)
-      forbidden_commands += %w(fail fork format gets global_variables)
-      forbidden_commands += %w(gsub iterator? lambda load local_variables)
-      forbidden_commands += %w(loop open p printf print proc putc puts)
-      forbidden_commands += %w(raise rand readline readlines require)
-      forbidden_commands += %w(require_relative select set_trace_func)
-      forbidden_commands += %w(sleep spawn sprintf srand sub syscall)
-      forbidden_commands += %w(system test throw trace_var trap)
-      forbidden_commands += %w(untrace_var warn)
-
-      forbidden_commands.each do |command|
-        forbidden_commands_hash[command] = true
-      end
-    end
   end
 end

@@ -72,8 +72,103 @@ module Graphenelib
   class SecruityViolationError < StandardError
   end
 
+  ##
   # If non String value is specified for the key parameter, then
   # KeyValueNotStringError will be raised.
   class KeyValueNotStringError < StandardError
+  end
+
+  ##
+  # Arbitrary data can be stored on the Graph as key value pairs. But
+  # the key has to be a non nil Object. If the key is nil, then the
+  # GraphDataKeyIsNilError will be thrown.
+  class GraphDataAdditionKeyIsNilError < StandardError
+  end
+
+  ##
+  # Arbitrary data can be stored on the Graph as key value pairs. But
+  # the key has to be a String. If the key is not a String, then the
+  # GraphDataKeyIsNotStringError will be thrown.
+  class GraphDataAdditionKeyIsNotStringError < StandardError
+  end
+
+  ##
+  # Arbitrary data can be stored on the Graph as key value pairs. But
+  # the key has to be a String with out any spaces. This restriction allows
+  # users to access the value of the key just by calling obj.key. If you pass
+  # in a key with spaces, then you cannot really access it through this way.
+  # So GraphDataKeyStringHasSpacesError will be thrown is spaces were found
+  # in the passed in key parameter.
+  class GraphDataAdditionKeyStringHasSpacesError < StandardError
+  end
+
+  ##
+  # Arbitrary data can be stored on the Graph as key value pairs. But
+  # the key has to have a value that doesn't collide with the names
+  # of instance methods of the class. By colliding we mean that the value
+  # specified in the key parameter (minus spaces in the front and back) is
+  # already the name of an instance method for the Object of a specific class
+  # in question. If there is a collision, then
+  # GraphDataKeyStringCollidesWithInstanceMethodNamesError will be
+  # raised.
+  class GraphDataAdditionKeyCollidesWithInstanceMethodNamesError < StandardError
+  end
+
+  ##
+  # Arbitrary data can be stored on the Graph as key value pairs. But if a key
+  # has been already added with some value and the user tries to add the key
+  # again, the value of the key is updated to the new value. But a
+  # User can request the data stored in the Graph object to be non updatable
+  # by passing a true value along with the key and value parameter. If a user
+  # has passed in this parameter and tries to add an already existing
+  # key, then the GraphDataValueNonUpdatableError will be raised.
+  class GraphDataAdditionValueIsNilError < StandardError
+  end
+
+  ##
+  # Arbitrary data can be stored on the Graph as key value pairs. But
+  # the value has to be a non nil Object. If the value is nil, then the
+  # GraphDataValueIsNilError will be thrown.
+  class GraphDataAdditionValueNonUpdatableError < StandardError
+  end
+
+  ##
+  # To remove data from the Graph's arbitrary data storage, you need to
+  # provide a String key. If a nil is provided as an input to the key, then
+  # GraphDataRemovalKeyNilError will be thrown.
+  class GraphDataRemovalKeyNilError < StandardError
+  end
+
+  ##
+  # To remove data from the Graph's arbitrary data storage, you need to
+  # provide a String key. If a non String value is provided as an input to the key,
+  # then GraphDataRemovalKeyNotStringError will be thrown.
+  class GraphDataRemovalKeyNotStringError < StandardError
+  end
+
+  ##
+  # To remove data from the Graph's arbitrary data storage, you need to
+  # provide a String key that is present on the Graph. If you provide a key
+  # that doesn't exist on the Graph, then GraphDataRemovalKeyNotFoundError
+  # will be raised. 
+  class GraphDataRemovalKeyNotFoundError < StandardError
+  end
+
+  ##
+  # You need a specify a key that is already present on the Graph object to view
+  # data associated with that key. If an invalid key is presented in the view_data
+  # method, then the GraphDataViewingKeyNotFoundError will be thrown.
+  class GraphDataViewingKeyNotFoundError < StandardError
+  end
+
+  ##
+  # Graph base class was designed to provide a set of defaults and
+  # method scaffolds for the UnDirectedGraph and DirectedGraph classes.
+  # So Graph base class provides but doesn't implement some methods
+  # and leave to its inheritants to implement those methods. But
+  # for some reason, the users continue to call these methods
+  # on the Graph class. So an error needs to be thrown to tell
+  # them to not use the Graph class on its own and use its Inheritants
+  class DontUseGraphClassError < StandardError
   end
 end

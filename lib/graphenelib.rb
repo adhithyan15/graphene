@@ -1,8 +1,8 @@
 require_relative 'graphenelib/version'
-require_relative 'graphenelib/errors/error'
-require_relative 'graphenelib/datastructures/graph'
-require_relative 'graphenelib/datastructures/directed_graph'
-require_relative 'graphenelib/datastructures/undirected_graph'
+require_relative 'graphenelib/errors/graph_errors'
+require_relative 'graphenelib/data_structures/graph'
+require_relative 'graphenelib/data_structures/directed_graph'
+require_relative 'graphenelib/data_structures/undirected_graph'
 
 ##
 # Graphenelib module contains several classes used in creating, manipulating and

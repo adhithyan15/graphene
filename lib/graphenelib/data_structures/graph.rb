@@ -70,8 +70,10 @@ module GrapheneLib
         # top_level nodes are the nodes that start the graph and other nodes
         # will be connected to these nodes. This key value pair is
         # necessary as the different graph algorithms require starting points
-        # to walk the graphs.
-        @adjacency_list['top_level'] = []
+        # to walk the graphs. All nodes will be initially added to the top
+        # level nodes. Based on the addition of edges, they will be transferred
+        # to the appropriate adjacency locations.
+        @adjacency_list['top_level'] = {}
 
         # storage (hash object) stores the actual nodes and maps them to their
         # keys.
@@ -96,7 +98,7 @@ module GrapheneLib
       # @raise [DontUseGraphClassError] Graph class is designed as an interface
       #        class. So please use its inheritants.
 
-      def add_node(input, key = '')
+      def add_node(_input, _key = '')
         error_message = 'Graph class is supposed to be an interface class. '
         error_message += ' But Ruby doesn\'t provide interface classes. So'
         error_message += ' Graph is designed as a regular class. But don\'t'
@@ -114,7 +116,7 @@ module GrapheneLib
       # @raise [DontUseGraphClassError] Graph class is designed as an interface
       #        class. So please use its inheritants.
 
-      def remove_node(input_node)
+      def remove_node(_input_node)
         error_message = 'Graph class is supposed to be an interface class. '
         error_message += ' But Ruby doesn\'t provide interface classes. So'
         error_message += ' Graph is designed as a regular class. But don\'t'
@@ -126,16 +128,16 @@ module GrapheneLib
 
       ##
       # add_edge method is a placeholder method for implementing logic to add
-      # an edge between two nodes. The edges can be directed, undirected or multi
-      # edged. The edges can also store arbitrary data in them. This is useful
-      # for storing things like weights and other descriptors useful in
-      # implementing certain algorithms.
+      # an edge between two nodes. The edges can be directed, undirected or
+      # multi edged. The edges can also store arbitrary data in them. This
+      # is useful for storing things like weights and other descriptors useful
+      # in implementing certain algorithms.
       #
       # Graph class doesn't implement the body of the add_edge method.
       #
       # @raise [DontUseGraphClassError] Graph class is designed as an interface
       #        class. So please use its inheritants.
-      def add_edge(node_1, node_2, edge_attributes = {})
+      def add_edge(_node_1, _node_2, _edge_attributes = {})
         error_message = 'Graph class is supposed to be an interface class. '
         error_message += ' But Ruby doesn\'t provide interface classes. So'
         error_message += ' Graph is designed as a regular class. But don\'t'
@@ -153,7 +155,7 @@ module GrapheneLib
       #
       # @raise [DontUseGraphClassError] Graph class is designed as an interface
       #        class. So please use its inheritants.
-      def remove_edge(node_1, node_2)
+      def remove_edge(_node_1, _node_2)
         error_message = 'Graph class is supposed to be an interface class. '
         error_message += ' But Ruby doesn\'t provide interface classes. So'
         error_message += ' Graph is designed as a regular class. But don\'t'
@@ -194,7 +196,8 @@ module GrapheneLib
       #        throw an exception instead of updating the previous value.
       # @return [nil] If the addition of data is successful, then it will not
       #         return anything.
-      # @raise [GraphDataAdditionKeyIsNilError] The key parameter provided is nil.
+      # @raise [GraphDataAdditionKeyIsNilError] The key parameter provided is
+      #        nil.
       # @raise [GraphDataAdditionKeyIsNotStringError] The key parameter provided
       #        is not String.
       # @raise [GraphDataAdditionKeyStringHasSpacesError] The key parameter
@@ -203,12 +206,12 @@ module GrapheneLib
       # @raise [GraphDataAdditionKeyCollidesWithInstanceMethodNamesError] Read
       #        the full error description of the error page. But the error
       #        name leads you in the right direction.
-      # @raise [GraphDataAdditionValueIsNilError] The value parameter provided is
-      #        nil.
+      # @raise [GraphDataAdditionValueIsNilError] The value parameter provided
+      #        is nil.
       # @raise [GraphDataAdditionValueNonUpdatableError] The key you provided
-      #        already exists. Because of your specification of no_update = true,
-      #        this error is being thrown. Please rescue this exception and deal
-      #        with it.
+      #        already exists. Because of your specification of no_update =
+      #        true, this error is being thrown. Please rescue this exception
+      #        and deal with it.
 
       def add_data(key, value, no_update = false)
         # Doing a nil check first
@@ -236,18 +239,18 @@ module GrapheneLib
         # keys have to be single words to be used as method names.
         if key.lstrip.rstrip.split.count > 1
           error_message = 'You are trying to add some data to the Graph object.'
-          error_message += ' But the key you have specified has spaces in between.'
-          error_message += ' This is not valid. Please remove the spaces'
-          error_message += ' in between. If you need to use multiple words,'
-          error_message += ' consider using underscores. Please fix this issue'
-          error_message += ' before proceeding!'
+          error_message += ' But the key you have specified has spaces in'
+          error_message += ' between. This is not valid. Please remove the'
+          error_message += ' spaces in between. If you need to use multiple'
+          error_message += ' words, consider using underscores between the'
+          error_message += ' words. Please fix this issue before proceeding!'
           fail GraphDataAdditionKeyStringHasSpacesError, error_message
         # Second check is to see if the method names collide with the key name
-      elsif self.methods.include?(key.lstrip.rstrip.to_sym)
+        elsif methods.include?(key.lstrip.rstrip.to_sym)
           error_message = 'You are trying to add some data to the Graph object.'
           error_message += ' But the key' + key + 'you have specified collides'
           error_message += ' with the name of an instance method of the Object.'
-          error_message += ' That is not allowed. Choose a different key value. '
+          error_message += ' That is not allowed. Choose a different key value.'
           error_message += ' To get a list of instance methods, run'
           error_message += ' {class_name}.instance_methods. That should give'
           error_message += ' give you a list of methods to avoid. Thanks!'
@@ -273,9 +276,9 @@ module GrapheneLib
           error_message = 'You are trying to add some data to the Graph object.'
           error_message += ' But the key you have specified is already exists'
           error_message += ' in the Graph data. Based on your request (through'
-          error_message += ' the no_update parameter being true), we are raising'
-          error_message += ' this exception. Please rescue this exception and '
-          error_message += ' and deal with it gracefully!'
+          error_message += ' the no_update parameter being true), we are'
+          error_message += ' raising this exception. Please rescue this'
+          error_message += ' exception and deal with it gracefully!'
           fail GraphDataAdditionValueNonUpdatableError, error_message
         end
       end
@@ -326,7 +329,7 @@ module GrapheneLib
           output = @arbitrary_data.delete(key.lstrip.rstrip)
         end
 
-        return output
+        output
       end
 
       ##
@@ -384,7 +387,6 @@ module GrapheneLib
         end
       end
 
-
       ##
       # length method returns the total number of nodes added through
       # the add_node method. If you add a new Graph object as a node
@@ -396,8 +398,8 @@ module GrapheneLib
       # @param force [Boolean] force recomputation of length through BFS
       # @return [Integer] Total number of nodes in the Graph
 
-      def length(force = false)
-        return @length
+      def length(_force = false)
+        @length
       end
 
       ##
@@ -446,7 +448,7 @@ module GrapheneLib
       # @raise [DontUseGraphClassError] Graph class is designed as an interface
       #        class. So please use its inheritants.
 
-      def exists?(input_node)
+      def exists?(_input_node)
         error_message = 'Graph class is supposed to be an interface class. '
         error_message += ' But Ruby doesn\'t provide interface classes. So'
         error_message += ' Graph is designed as a regular class. But don\'t'
@@ -455,7 +457,6 @@ module GrapheneLib
         error_message += ' a lot of features. Thanks!'
         fail DontUseGraphClassError, error_message
       end
-
 
       ##
       # visual_output method is another placeholder method to be overridden by
@@ -467,7 +468,7 @@ module GrapheneLib
       # @raise [DontUseGraphClassError] Graph class is designed as an interface
       #        class. So please use its inheritants.
 
-      def visual_output(format = 'pdf')
+      def visual_output(_format = 'pdf')
         error_message = 'Graph class is supposed to be an interface class. '
         error_message += ' But Ruby doesn\'t provide interface classes. So'
         error_message += ' Graph is designed as a regular class. But don\'t'
@@ -476,7 +477,6 @@ module GrapheneLib
         error_message += ' a lot of features. Thanks!'
         fail DontUseGraphClassError, error_message
       end
-
     end
   end
 end

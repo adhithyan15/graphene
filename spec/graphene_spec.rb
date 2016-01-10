@@ -1,6 +1,6 @@
 require "../lib/graphenelib"
 
-Graph = Graphenelib::Graph
+Graph = GrapheneLib::DataStructures::Graph
 
 # Graph class is designed as an interface class with only a few methods
 # implemented fully to spec. So most of the following tests will be to
@@ -11,46 +11,46 @@ describe Graph do
     @graph = Graph.new()
   end
   it "should raise an error if you try to add a node to Graph" do
-    expect{@graph.add_node(5)}.to raise_error(Graphenelib::DontUseGraphClassError)
+    expect{@graph.add_node(5)}.to raise_error(GrapheneLib::Errors::GraphErrors::DontUseGraphClassError)
   end
   it "should raise an error if you try to remove a node from Graph" do
-    expect{@graph.remove_node(5)}.to raise_error(Graphenelib::DontUseGraphClassError)
+    expect{@graph.remove_node(5)}.to raise_error(GrapheneLib::Errors::GraphErrors::DontUseGraphClassError)
   end
   it "should raise an error if you try to add an edge between nodes" do
-    expect{@graph.add_edge(5,6)}.to raise_error(Graphenelib::DontUseGraphClassError)
+    expect{@graph.add_edge(5,6)}.to raise_error(GrapheneLib::Errors::GraphErrors::DontUseGraphClassError)
   end
   it "should raise an error if you try to remove an edge between nodes" do
-    expect{@graph.remove_edge(5,6)}.to raise_error(Graphenelib::DontUseGraphClassError)
+    expect{@graph.remove_edge(5,6)}.to raise_error(GrapheneLib::Errors::GraphErrors::DontUseGraphClassError)
   end
   it "should raise an error if you try to add data to Graph using a nil key" do
-    expect{@graph.add_data(nil,6)}.to raise_error(Graphenelib::GraphDataAdditionKeyIsNilError)
+    expect{@graph.add_data(nil,6)}.to raise_error(GrapheneLib::Errors::GraphErrors::GraphDataAdditionKeyIsNilError)
   end
   it "should raise an error if you try to add data to Graph using a non String key" do
-    expect{@graph.add_data(5,6)}.to raise_error(Graphenelib::GraphDataAdditionKeyIsNotStringError)
+    expect{@graph.add_data(5,6)}.to raise_error(GrapheneLib::Errors::GraphErrors::GraphDataAdditionKeyIsNotStringError)
   end
   it "should raise an error if you try to add data to Graph using a multiword key" do
-    expect{@graph.add_data("Hello World",6)}.to raise_error(Graphenelib::GraphDataAdditionKeyStringHasSpacesError)
+    expect{@graph.add_data("Hello World",6)}.to raise_error(GrapheneLib::Errors::GraphErrors::GraphDataAdditionKeyStringHasSpacesError)
   end
   it "should raise an error if you try to add data to Graph using to_s as key" do
-    expect{@graph.add_data("to_s",6)}.to raise_error(Graphenelib::GraphDataAdditionKeyCollidesWithInstanceMethodNamesError)
+    expect{@graph.add_data("to_s",6)}.to raise_error(GrapheneLib::Errors::GraphErrors::GraphDataAdditionKeyCollidesWithInstanceMethodNamesError)
   end
   it "should raise an error if you try to add data to Graph using nil as value" do
-    expect{@graph.add_data("hello",nil)}.to raise_error(Graphenelib::GraphDataAdditionValueIsNilError)
+    expect{@graph.add_data("hello",nil)}.to raise_error(GrapheneLib::Errors::GraphErrors::GraphDataAdditionValueIsNilError)
   end
   it "should return 6 if you pass in `hello` as key and 6 as value to add_data" do
     expect(@graph.add_data("hello",6)).to eq(6)
   end
   it "should raise an error if you pass in `hello` as key and 6 as value again with no_update equals true" do
-    expect{@graph.add_data("hello",6,true)}.to raise_error(Graphenelib::GraphDataAdditionValueNonUpdatableError)
+    expect{@graph.add_data("hello",6,true)}.to raise_error(GrapheneLib::Errors::GraphErrors::GraphDataAdditionValueNonUpdatableError)
   end
   it "should raise an error if you pass in nil as the key parameter into remove_data" do
-    expect{@graph.remove_data(nil)}.to raise_error(Graphenelib::GraphDataRemovalKeyNilError)
+    expect{@graph.remove_data(nil)}.to raise_error(GrapheneLib::Errors::GraphErrors::GraphDataRemovalKeyNilError)
   end
   it "should raise an error if you pass in 6 as the key parameter into remove_data" do
-    expect{@graph.remove_data(6)}.to raise_error(Graphenelib::GraphDataRemovalKeyNotStringError)
+    expect{@graph.remove_data(6)}.to raise_error(GrapheneLib::Errors::GraphErrors::GraphDataRemovalKeyNotStringError)
   end
   it "should raise an error if you pass in `world` as the key parameter into remove_data" do
-    expect{@graph.remove_data("world")}.to raise_error(Graphenelib::GraphDataRemovalKeyNotFoundError)
+    expect{@graph.remove_data("world")}.to raise_error(GrapheneLib::Errors::GraphErrors::GraphDataRemovalKeyNotFoundError)
   end
   it "should return 6 when you pass in `hello` into the remove_data method" do
     @graph.add_data("hello",6)
@@ -70,7 +70,7 @@ describe Graph do
   end
   it "should raise an error if the key `world` is passed into view_data" do
     @graph.add_data("hello",6)
-    expect{@graph.view_data("world")}.to raise_error(Graphenelib::GraphDataViewingKeyNotFoundError)
+    expect{@graph.view_data("world")}.to raise_error(GrapheneLib::Errors::GraphErrors::GraphDataViewingKeyNotFoundError)
   end
   it "should return 6 if the key `hello` is passed through message call" do
     @graph.add_data("hello",6)
@@ -83,15 +83,15 @@ describe Graph do
     expect(@graph.length).to eq(0)
   end
   it "should raise an error if a `.directed?` method is called" do
-    expect{@graph.directed?}.to raise_error(Graphenelib::DontUseGraphClassError)
+    expect{@graph.directed?}.to raise_error(GrapheneLib::Errors::GraphErrors::DontUseGraphClassError)
   end
   it "should raise an error if a `.undirected?` method is called" do
-    expect{@graph.undirected?}.to raise_error(Graphenelib::DontUseGraphClassError)
+    expect{@graph.undirected?}.to raise_error(GrapheneLib::Errors::GraphErrors::DontUseGraphClassError)
   end
   it "should raise an error if a `.exists?` method is called" do
-    expect{@graph.exists?(5)}.to raise_error(Graphenelib::DontUseGraphClassError)
+    expect{@graph.exists?(5)}.to raise_error(GrapheneLib::Errors::GraphErrors::DontUseGraphClassError)
   end
   it "should raise an error if a `.visual_output` method is called" do
-    expect{@graph.visual_output}.to raise_error(Graphenelib::DontUseGraphClassError)
+    expect{@graph.visual_output}.to raise_error(GrapheneLib::Errors::GraphErrors::DontUseGraphClassError)
   end
 end

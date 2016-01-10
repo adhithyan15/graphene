@@ -237,7 +237,7 @@ module GrapheneLib
         # Next there are two checks done
         # First check is to see if the key is a single word or multiple words.
         # keys have to be single words to be used as method names.
-        if key.lstrip.rstrip.split.count > 1
+        if key.lstrip.rstrip.split.size > 1
           error_message = 'You are trying to add some data to the Graph object.'
           error_message += ' But the key you have specified has spaces in'
           error_message += ' between. This is not valid. Please remove the'
